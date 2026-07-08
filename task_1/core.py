@@ -1,5 +1,8 @@
 import uuid
-
+import hashlib
+import io
+import qrcode
+import qrcode.image.svg
 def remainder_list(n):
     divisor = 62
     remainder=0
@@ -59,6 +62,30 @@ def uuid_func():
     y= x.int
     return (y,x)
 
+
+def hash_url(longurl):
+    # we are using sha hashing to generate hash for given urls, so that instead of using whole 
+    # url as key in redis, we can simply use a unique hash, which is much shorter
+    data=longurl.encode('utf-8')
+    print(data)
+    sha_obj=hashlib.shake_256()
+    sha_obj.update(data)
+    output=sha_obj.hexdigest(10)
+    return output
+    
+
+def generate_qr(longurl):
+
+    io_obj=io.BytesIO()
+
+    img_factory=qrcode.image.svg.SvgPathImage
+    qrimg=qrcode.make(longurl, image_factory=img_factory)
+    
+    qrimg.save(io_obj)
+
+    output_string=io_obj.getvalue().decode("utf-8")
+    return output_string
+
 if __name__=="__main__":
     l=remainder_list(123)
     print(l)
@@ -70,3 +97,4 @@ if __name__=="__main__":
     print(uuid_val)
     print(uuid_string)
     print(master_func(uuid_val))
+    print(hash_url("MAYANK"))
