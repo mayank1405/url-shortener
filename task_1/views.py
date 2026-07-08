@@ -9,8 +9,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-base_url_comp="http://127.0.0.1:8000/t1/shrt/"
-
+# base_url_comp="http://127.0.0.1:8000/t1/shrt/"
+base_url_comp=os.getenv("BASE_URL")
 upstash_url=os.getenv("UPSTASH_URL")
 r=redis.Redis.from_url(upstash_url)
 val1=r.get("mike")
